@@ -1,0 +1,70 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700&display=swap");
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: #0177FB;
+}
+
+.container-custom {
+    margin-left:35%;
+    width: 65%;
+    min-height: 100vh;
+    display: flex;
+    background: #fff;
+    padding: 30px;
+    flex-direction: column;
+}
+
+.appName {
+    margin:auto;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 600;
+    margin-top: 32px;
+    margin-bottom: 79px;
+}
+
+.title {
+    margin:auto;
+    font-family: Poppins;
+    font-size: 60px;
+    font-style: normal;
+    font-weight: 600;
+    margin-top: -50px;
+    margin-bottom: 39px;
+}
+
+
+.custom-margin {
+    margin-bottom : 40px
+}
+
+input {
+    font-family: Montserrat;
+    font-weight:500;
+    color:#000;
+}
+
+input[type="number"]::-webkit-outer-spin-button, 
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+
+
+
+
+
