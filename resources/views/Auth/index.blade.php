@@ -57,8 +57,8 @@
                             <div class="button input-box">
                                 <input type="submit" value="Sumbit">
                             </div>
-                            <div class="text sign-up-text">Don't have an account? <label for="flip">Sigup
-                                    now</label></div>
+                            <div class="text sign-up-text">Don't have an account? <label for="flip">Sign Up
+                                    Now!</label></div>
                         </div>
                     </form>
                 </div>
