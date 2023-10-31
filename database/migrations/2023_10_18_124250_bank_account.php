@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('account_number');
             $table->decimal('balance', 10, 2)->default(0.00);
+            $table->timestamps();
         });
     }
 

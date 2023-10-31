@@ -2,59 +2,108 @@
 @section('content')
     <!-- Begin Page Content -->
     <div class="container-fluid">
+        <h5 style="font-weight:300;">Have a great day! Good luck on your financial journey.</h5>
 
         <!-- Page Heading -->
-        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-        </div>
 
 
         <!-- Content Row -->
         <div class="row">
-
-            <!-- Earnings (Monthly) Card Example -->
-            <div class="col-xl-6 col-md-6 mb-4">
-                <div class="card border-left-primary shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                    Saldo</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                    {{ number_format(session('balance'), 0, ',', '.') }}</div>
+            <div class="col-6">
+                <!-- Earnings (Monthly) Card Example -->
+                <h3 class="mt-5 fst-italic">My Card</h3>
+                <div class="col-xl-7 col-md-6 mb-4 ">
+                    <div class="card box-sizing shadow h-100 py-2" style="border-radius: 20px; background:#0177FB;">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center p-2 ml-3">
+                                <div class="col mr-2">
+                                    <div class="text-xl font-weight-light  text-capitalize mb-1">
+                                        <div class="text-md font-weight-light  text-white text-capitalize mb-1">
+                                            Name</div>
+                                        <div class="h3 font-weight-light text-white text-capitalize mb-1">
+                                            {{ session('fullname') }}</div>
+                                        <div class="h5 mt-5 mb-0 font-weight-light text-white">
+                                            @php
+                                                $accountNumber = session('account_number');
+                                                $codeBank = substr($accountNumber, 0, 4);
+                                                $randomNumber = substr($accountNumber, 4, 5);
+                                                $idNumber = substr($accountNumber, 9);
+                                                $formattedAccountNumber = implode(' ', [$codeBank, $randomNumber, $idNumber]);
+                                                echo $formattedAccountNumber;
+                                            @endphp
+                                        </div>
+                                        <div class="text-xl font-weight-light text-white text-capitalize mb-1">
+                                            Account Number</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class=""></i>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-auto">
-                                <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+
+                    <!-- Earnings (Monthly) Card Example -->
+                </div>
+                <h3 class="mt-5 fst-italic">Recent Transactions</h3>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="list-group-item text-center item-align-center border-0">
+                                <div class="row d-flex align-items-center">
+                                    <div class="col-md-1">
+                                        <img src="{{ asset('assets/img/Janet.png') }}" alt="User Avatar"
+                                            class="img-fluid rounded-circle">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h5 class="mb-0">{{ session('fullname') }}</h5>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p class="mb-0"> {{ session('date') }}</p>
+                                    </div>
+                                    <div class="col-md-3 text-end">
+                                        <p class="mb-0">Balance: $1,000.00</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Add more rows as needed -->
+                </div>
+            </div>
+            <div class="col-6  d-flex justify-content-end">
+                <!-- Earnings (Monthly) Card Example -->
+                <div class="col-xl-8 col-lg-7">
+                    <div class="card shadow mb-4">
+                        <!-- Card Header - Dropdown -->
+                        <div class="card-header py-3 d-flex flex-row align-items-center">
+                            <h6 class="m-0 font-weight-bold text-primary px-2">Monthly </h6>
+                            <div class="dropdown no-arrow">
+                                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-chevron-down fa-sm fa-fw text-gray-400"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-left shadow animated--fade-in"
+                                    aria-labelledby="dropdownMenuLink">
+                                    <a class="dropdown-item" href="#">January</a>
+                                    <a class="dropdown-item" href="#">Another action</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Something else here</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Card Body -->
+                        <div class="card-body">
+                            <div class="chart-area">
+                                <canvas id="myAreaChart"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <!-- Content Row -->
 
-            <!-- Earnings (Monthly) Card Example -->
-            <div class="col-xl-6 col-md-6 mb-4">
-                <div class="card border-left-success shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                    Pengeluaran</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">-</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-        </div>
-
-        <!-- Content Row -->
-
-        <div class="row">
+            {{-- <div class="row">
 
             <!-- Area Chart -->
             <div class="col-xl-8 col-lg-7">
@@ -126,9 +175,13 @@
                     </div>
                 </div>
             </div>
+        </div> --}}
+
+
         </div>
+        <!-- /.container-fluid -->
+    @endsection
 
-
-    </div>
-    <!-- /.container-fluid -->
-@endsection
+    @section('topbar')
+        <h3 class="text-capitalize" style="color : black">Hey There, {{ session('fullname') }}</h3>
+    @endsection

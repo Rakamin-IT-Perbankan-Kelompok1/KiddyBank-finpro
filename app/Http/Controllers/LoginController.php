@@ -39,14 +39,13 @@ class LoginController extends Controller
      */
     public function daftar(Request $request)
     {
-        // dd($request->all());
         $request->validate([
             'username' => 'required|max:255|unique:users,username',
             'fullname' => 'required|max:255',
             'email' => 'required|email|max:255',
             'telephone' => 'required|numeric',
             'address' => 'required|max:255',
-            'password' => 'required'
+            'password' => 'required',
         ], [
             'username.required' => 'username harus diisi',
             'username.max' => 'karakter username terlalu panjang',
@@ -65,31 +64,50 @@ class LoginController extends Controller
             'address.required' => 'alamat harus diisi',
             'address.max' => 'karakter alamat terlalu panjang',
 
-            'password.required' => 'password harus diisi'
+            'password.required' => 'password harus diisi',
         ]);
 
-        try {
-            $password = Hash::make($request->password);
+        // try {
+        $password = Hash::make($request->password);
 
-            $user = new User();
-            $user->username = $request->username;
-            $user->fullname = $request->fullname;
-            $user->email = $request->email;
-            $user->telephone = $request->telephone;
-            $user->address = $request->address;
-            $user->password = $password;  
+        $user = new User();
+        $user->username = $request->username;
+        $user->fullname = $request->fullname;
+        $user->email = $request->email;
+        $user->telephone = $request->telephone;
+        $user->address = $request->address;
+        $user->password = $password;
+
+        if ($user->username == 'admin') {
+            $user->role = 'admin';
+        } else {
             $user->role = 'parent';
-            
-            $user->save();
-            
-            
-            return redirect()->to('/')->with('success', 'data berhasil ditambahkan');
-        } catch (\Throwable $th) {
-            //throw $th;
-            return redirect()->back()->with('error', 'data gagal ditambahkan');
         }
-       
+        $user->save();
+
+
+        // dd($accountNumber);
+
+        // Create an account entry in the accountbank table
+        $account = new AccountBank();
+        $account->id = $user->id;
+
+        // Generate a unique account number
+        $bankCode = '0001'; // Replace with your actual bank code
+        $randomNumbers = str_pad(mt_rand(0, 99999), 5, '0', STR_PAD_LEFT);
+        $id = str_pad($user->id, 5, '0', STR_PAD_LEFT); // Assuming user ID is unique
+        $accountNumber = $bankCode . $randomNumbers . $id;
+
+        $account->account_number = $accountNumber;
+        $account->balance = 500000; // You can initialize the balance as needed
+        $account->save();
+
+        return redirect()->to('/')->with('success', 'data berhasil ditambahkan');
+        // } catch (\Throwable $th) {
+        return redirect()->back()->with('error', 'data gagal ditambahkan');
+        // }
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -116,19 +134,21 @@ class LoginController extends Controller
         $result = User::where('email', $email)->first();
         if ($result) {
             if (password_verify($password, $result->password)) {
-                if ($result->level_user == "admin") {
+                if ($result->role == "admin") {
                     $level = "admin";
                 } else {
                     $level = "parent";
                 }
 
                 $userBalance = AccountBank::where('id', $result->id)->first();
+                $accountNumber = $userBalance->account_number; 
+                $date = date('Y-m-d', strtotime($result->created_at));
                 if ($userBalance) {
                     $balanceAmount = $userBalance->balance;
                 } else {
                     $balanceAmount = 0;
                 }
-              
+                
                 session([
                     'login' => true,
                     'username' => $result->username,
@@ -137,8 +157,10 @@ class LoginController extends Controller
                     'role' => $level,
                     'id' =>  $result->id,
                     'balance' => $balanceAmount,
+                    'account_number' => $accountNumber,
+                    'date' => $date,
                 ]);
-                
+
                 return redirect()->to('dashboard');
             } else {
                 return redirect()->to('/')->with('error', 'Email Atau Password Salah');

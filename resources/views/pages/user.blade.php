@@ -3,12 +3,11 @@
     <div class="container-fluid">
 
         <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">Data User</h1>
 
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Data Users</h6>
             </div>
             <div class="card-body">
 
@@ -27,7 +26,7 @@
                                 @if ($item->name != 'admin')
                                     <tr>
                                         <td> {{ $i }}</td>
-                                        <td> {{ $item->name }}</td>
+                                        <td> {{ $item->fullname }}</td>
                                         <td> {{ $item->email }}</td>
                                     </tr>
                                     <?php $i++; ?>
@@ -39,4 +38,8 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('topbar')
+    <h3 style="color : black">User</h3>
 @endsection
