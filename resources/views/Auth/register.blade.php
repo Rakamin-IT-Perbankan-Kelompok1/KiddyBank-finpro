@@ -17,6 +17,27 @@
 
 </head>
 
+
+<head>
+    <title>Buat Akun Anak</title>
+</head>
+<body>
+    <h1>Buat Akun Anak</h1>
+    <form action="proses_pendaftaran.php" method="post">
+        <label for="nama_anak">Nama Anak:</label>
+        <input type="text" id="nama_anak" name="nama_anak" required><br><br>
+
+        <label for="email_anak">Email Anak:</label>
+        <input type="email" id="email_anak" name="email_anak" required><br><br>
+
+        <label for="saldo_awal">Saldo Awal:</label>
+        <input type="number" id="saldo_awal" name="saldo_awal" required><br><br>
+
+        <input type="submit" value="Buat Akun">
+    </form>
+</body>
+
+
 <body>
     <div class="container-custom">
         @if (session('success'))
