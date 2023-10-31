@@ -57,7 +57,7 @@
 
                 <div class=" mx-auto">Don't have an account?
                     <label class="text-decoration-underline mb-5">
-                        <a href="{{ url('/signup') }}"> Sigup now
+                        <a href="{{ url('/signup') }}"> Signup now
                     </label>
                 </div>
             </div>
