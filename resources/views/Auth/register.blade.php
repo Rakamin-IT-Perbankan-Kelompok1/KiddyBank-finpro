@@ -18,7 +18,7 @@
 </head>
 
 
-<head>
+{{-- <head>
     <title>Buat Akun Anak</title>
 </head>
 <body>
@@ -35,7 +35,7 @@
 
         <input type="submit" value="Buat Akun">
     </form>
-</body>
+</body> --}}
 
 
 <body>

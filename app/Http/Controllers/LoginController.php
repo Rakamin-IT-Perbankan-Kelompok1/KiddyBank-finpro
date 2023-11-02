@@ -90,7 +90,7 @@ class LoginController extends Controller
 
         // Create an account entry in the accountbank table
         $account = new AccountBank();
-        $account->id = $user->id;
+        $account->user_id = $user->id;
 
         // Generate a unique account number
         $bankCode = '0001'; // Replace with your actual bank code
@@ -98,6 +98,7 @@ class LoginController extends Controller
         $id = str_pad($user->id, 5, '0', STR_PAD_LEFT); // Assuming user ID is unique
         $accountNumber = $bankCode . $randomNumbers . $id;
 
+        $account->account_type= $user->role;
         $account->account_number = $accountNumber;
         $account->balance = 500000; // You can initialize the balance as needed
         $account->save();
@@ -136,8 +137,12 @@ class LoginController extends Controller
             if (password_verify($password, $result->password)) {
                 if ($result->role == "admin") {
                     $level = "admin";
-                } else {
+                } elseif ($result->role == "parent") {
                     $level = "parent";
+                } elseif ($result->role == "child"){
+                    $level = "child";
+                } else {
+                    echo("User Role Not Found");
                 }
 
                 $userBalance = AccountBank::where('id', $result->id)->first();

@@ -8,7 +8,7 @@
 
 
         <!-- Content Row -->
-        <div class="row">
+        <div class="row" style="height:1000px">
             <div class="col-6">
                 <!-- Earnings (Monthly) Card Example -->
                 <h3 class="mt-5 fst-italic">My Card</h3>
@@ -71,6 +71,7 @@
                     <!-- Add more rows as needed -->
                 </div>
             </div>
+
             <div class="col-6  d-flex justify-content-end">
                 <!-- Earnings (Monthly) Card Example -->
                 <div class="col-xl-8 col-lg-7">
@@ -86,7 +87,16 @@
                                 <div class="dropdown-menu dropdown-menu-left shadow animated--fade-in"
                                     aria-labelledby="dropdownMenuLink">
                                     <a class="dropdown-item" href="#">January</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
+                                    <a class="dropdown-item" href="#">February</a>
+                                    <a class="dropdown-item" href="#">March</a>
+                                    <a class="dropdown-item" href="#">April</a>
+                                    <a class="dropdown-item" href="#">June</a>
+                                    <a class="dropdown-item" href="#">July</a>
+                                    <a class="dropdown-item" href="#">August</a>
+                                    <a class="dropdown-item" href="#">September</a>
+                                    <a class="dropdown-item" href="#">October</a>
+                                    <a class="dropdown-item" href="#">November</a>
+                                    <a class="dropdown-item" href="#">December</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="#">Something else here</a>
                                 </div>
@@ -99,6 +109,23 @@
                             </div>
                         </div>
                     </div>
+                    <div class="card shadow py-2" style="border-radius: 20px; background:white;">
+                        <summary div class="card-body">
+                            <div class="row d-flex align-items-center p-2 ml-3">
+                                <div class="text-xl font-weight-light text-capitalize mb-1">
+                                    <img src="{{ asset('assets/img/user-plus.svg') }}" alt="User Avatar"
+                                        class="img-fluid rounded-circle">
+                                </div>
+                                <div class="col-md-5 text-end">
+                                    <p class="mb-0">ADD CHILD ACCOUNT</p>
+                                </div>
+                                <div class="col-auto">
+                                    <i class=""></i>
+                                </div>
+                            </div>
+                        </summary>
+                    </div>
+                    
                 </div>
             </div>
             <!-- Content Row -->

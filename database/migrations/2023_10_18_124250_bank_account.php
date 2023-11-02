@@ -13,13 +13,15 @@ return new class extends Migration
     {
         Schema::create('bankAccount', function (Blueprint $table) {
             $table->id();
+            $table->string('user_id');
             $table->string('account_number');
+            $table->string('account_type');
             $table->decimal('balance', 10, 2)->default(0.00);
             $table->timestamps();
         });
     }
 
-    /**
+    /** 
      * Reverse the migrations.
      */
     public function down(): void

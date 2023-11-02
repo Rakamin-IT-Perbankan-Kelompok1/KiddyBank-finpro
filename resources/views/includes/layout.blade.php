@@ -87,7 +87,7 @@
                     <span style=" font-size:18px; margin-top:3px; margin-left:6px;">Transfer</span></a>
             </li>
             <li class="nav-item  py-2">
-                <a class="nav-link" href="{{ url('transfer') }}">
+                <a class="nav-link" href="{{ url('transaction') }}">
                     <img src="{{ asset('assets/img/transaction.png') }}" alt="Transaction" style="width: 18px;">
                     <span style=" font-size:18px; margin-top:3px; margin-left:6px;">Transaction</span></a>
             </li>
