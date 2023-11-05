@@ -20,16 +20,16 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- Add rows (tr) and data (td) here for each transaction -->
-                                <tr>
-                                    <td><img src="transaction_image.jpg" alt="Transaction Image"></td>
-                                    <td>John Doe</td>
-                                    <td>2023-11-02</td>
-                                    <td>1234567890</td>
-                                    <td>$100.00</td>
-                                    <td>Completed</td>
-                                </tr>
-                                <!-- Add more rows as needed -->
+                                @foreach ($transactions as $transaction) <!-- Ubah $transaction menjadi $transactions -->
+                                    <tr>
+                                        <td><img src="{{ $transaction->image }}" alt="Transaction Image"></td>
+                                        <td>{{ $transaction->recipient_name }}</td>
+                                        <td>{{ $transaction->transaction_date }}</td>
+                                        <td>{{ $transaction->account_number }}</td>
+                                        <td>${{ $transaction->amount }}</td>
+                                        <td>{{ $transaction->transaction_status }}</td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
