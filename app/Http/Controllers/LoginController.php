@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\AccountBank;
+use App\Models\Child;
 use App\Models\User;
 use App\Models\Users_Balance;
 use App\Models\Users_Data;
@@ -67,46 +68,46 @@ class LoginController extends Controller
             'password.required' => 'password harus diisi',
         ]);
 
-        // try {
-        $password = Hash::make($request->password);
+        try {
+            $password = Hash::make($request->password);
 
-        $user = new User();
-        $user->username = $request->username;
-        $user->fullname = $request->fullname;
-        $user->email = $request->email;
-        $user->telephone = $request->telephone;
-        $user->address = $request->address;
-        $user->password = $password;
+            $user = new User();
+            $user->username = $request->username;
+            $user->fullname = $request->fullname;
+            $user->email = $request->email;
+            $user->telephone = $request->telephone;
+            $user->address = $request->address;
+            $user->password = $password;
 
-        if ($user->username == 'admin') {
-            $user->role = 'admin';
-        } else {
-            $user->role = 'parent';
+            if ($user->username == 'admin') {
+                $user->role = 'admin';
+            } else {
+                $user->role = 'parent';
+            }
+            $user->save();
+
+
+            // dd($accountNumber);
+
+            // Create an account entry in the accountbank table
+            $account = new AccountBank();
+            $account->user_id = $user->id;
+
+            // Generate a unique account number
+            $bankCode = '0001'; // Replace with your actual bank code
+            $randomNumbers = str_pad(mt_rand(0, 99999), 5, '0', STR_PAD_LEFT);
+            $id = str_pad($user->id, 5, '0', STR_PAD_LEFT); // Assuming user ID is unique
+            $accountNumber = $bankCode . $randomNumbers . $id;
+
+            $account->account_type = $user->role;
+            $account->account_number = $accountNumber;
+            $account->balance = 500000; // You can initialize the balance as needed
+            $account->save();
+
+            return redirect()->to('/')->with('success', 'data berhasil ditambahkan');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'data gagal ditambahkan');
         }
-        $user->save();
-
-
-        // dd($accountNumber);
-
-        // Create an account entry in the accountbank table
-        $account = new AccountBank();
-        $account->user_id = $user->id;
-
-        // Generate a unique account number
-        $bankCode = '0001'; // Replace with your actual bank code
-        $randomNumbers = str_pad(mt_rand(0, 99999), 5, '0', STR_PAD_LEFT);
-        $id = str_pad($user->id, 5, '0', STR_PAD_LEFT); // Assuming user ID is unique
-        $accountNumber = $bankCode . $randomNumbers . $id;
-
-        $account->account_type= $user->role;
-        $account->account_number = $accountNumber;
-        $account->balance = 500000; // You can initialize the balance as needed
-        $account->save();
-
-        return redirect()->to('/')->with('success', 'data berhasil ditambahkan');
-        // } catch (\Throwable $th) {
-        return redirect()->back()->with('error', 'data gagal ditambahkan');
-        // }
     }
 
 
@@ -133,27 +134,26 @@ class LoginController extends Controller
         $password = $request->password;
 
         $result = User::where('email', $email)->first();
-        if ($result) {
+        $child = Child::where('email', $email)->first();
+        if ($result && !$child) {
             if (password_verify($password, $result->password)) {
                 if ($result->role == "admin") {
                     $level = "admin";
                 } elseif ($result->role == "parent") {
                     $level = "parent";
-                } elseif ($result->role == "child"){
-                    $level = "child";
                 } else {
-                    echo("User Role Not Found");
+                    return redirect("/")->with("error", "Role Not Found");
                 }
 
                 $userBalance = AccountBank::where('id', $result->id)->first();
-                $accountNumber = $userBalance->account_number; 
+                $accountNumber = $userBalance->account_number;
                 $date = date('Y-m-d', strtotime($result->created_at));
                 if ($userBalance) {
                     $balanceAmount = $userBalance->balance;
                 } else {
                     $balanceAmount = 0;
                 }
-                
+
                 session([
                     'login' => true,
                     'username' => $result->username,
@@ -167,6 +167,34 @@ class LoginController extends Controller
                 ]);
 
                 return redirect()->to('dashboard');
+            } else {
+                return redirect()->to('/')->with('error', 'Email Atau Password Salah');
+            }
+        } else if ($child && !$result) {
+            if (password_verify($password, $child->password)) {
+
+                // $userBalance = AccountBank::where('id', $result->id)->first();
+                // $accountNumber = $userBalance->account_number;
+                // $date = date('Y-m-d', strtotime($result->created_at));
+                // if ($userBalance) {
+                //     $balanceAmount = $userBalance->balance;
+                // } else {
+
+                // }
+                $balanceAmount = 0;
+                session([
+                    'login' => true,
+                    'username' => $child->username,
+                    'fullname' => $child->fullname,
+                    'email' => $child->email,
+                    'role' => 'Child',
+                    'id' =>  $child->id,
+                    'balance' => $balanceAmount,
+                    // 'account_number' => $accountNumber,
+                    // 'date' => $date,
+                ]);
+                return view('Auth.registerChildOTP');
+                // return redirect()->to('dashboard');
             } else {
                 return redirect()->to('/')->with('error', 'Email Atau Password Salah');
             }

@@ -116,8 +116,8 @@
                                     </label>
                                 </div>
                                 <div class="col-sm-7 border-bottom" style="padding: 0px">
-                                    <input type="text" class="form-control-plaintext" id="recipientInput" placeholder=" "
-                                        readonly disabled>
+                                    <input type="text" class="form-control-plaintext" id="recipientInput"
+                                        placeholder=" " readonly disabled>
                                 </div>
                             </div>
                             <div class="row" style="margin-left: 75px;margin-bottom:50px;">
@@ -132,7 +132,7 @@
                                 </div>
                                 <div class="col-sm-7 border-bottom" style="padding: 0px">
                                     <input type="text" class="form-control-plaintext" id="destinedBank"
-                                        placeholder=" ">
+                                        placeholder=" " maxlength="1">
                                 </div>
                             </div>
                             <div class=" row" style="margin-left: 75px;margin-bottom:50px;">
@@ -174,25 +174,25 @@
                 </div>
             </div>
         </div>
-        {{-- <div class="modal fade bd-example-modal-lg" id="successModal" tabindex="-1" role="dialog"
-        aria-labelledby="successModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body d-flex mx-auto flex-column">
-                    <h1 style="color : black; font-weight:bold;">Transaction Successful</h1>
-                    <img src={{ asset('assets/img/success.png') }} alt="Success" />
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" type="button" data-dismiss="modal">OK</button>
+        <div class="modal fade bd-example-modal-lg" id="successModal" tabindex="-1" role="dialog"
+            aria-labelledby="successModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body d-flex mx-auto flex-column">
+                        <h1 style="color : black; font-weight:bold;">Transaction Successful</h1>
+                        <img src={{ asset('assets/img/success.png') }} alt="Success" />
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="button" data-dismiss="modal">OK</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div> --}}
         {{-- <div class="modal fade bd-example-modal-lg" id="failedModal" tabindex="-1" role="dialog"
         aria-labelledby="successModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">

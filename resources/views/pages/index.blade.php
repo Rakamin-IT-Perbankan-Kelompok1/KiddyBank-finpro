@@ -116,8 +116,8 @@
                                     <img src="{{ asset('assets/img/user-plus.svg') }}" alt="User Avatar"
                                         class="img-fluid rounded-circle">
                                 </div>
-                                <div class="col-md-5 text-end">
-                                    <p class="mb-0">ADD CHILD ACCOUNT</p>
+                                <div class="col-md-6 text-end">
+                                    <a class="mb-0 text-decoration-none text-dark" href="{{url('registerKids')}}">ADD CHILD ACCOUNT</a>
                                 </div>
                                 <div class="col-auto">
                                     <i class=""></i>

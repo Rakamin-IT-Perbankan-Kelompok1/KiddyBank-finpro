@@ -52,7 +52,7 @@
         </div>
         <div class="title">Registration</div>
 
-        <form action="{{ url('/daftar') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ url('/registerChild')}}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="d-flex justify-content-center flex-column mx-auto">
                 <div class="input-group mb-4 ">
@@ -117,13 +117,7 @@
                         <small>{{ $message }}</small>
                     @enderror
                 </div> --}}
-                <button type="submit " class="btn btn-primary btn-lg rounded-pill mt-3 mb-5 col-5 mx-auto">Sign Up</button>
-
-                <div class=" mx-auto">Already have an account?
-                    <label class="text-decoration-underline mb-5">
-                        <a href="{{ url('/') }}"> Log In
-                    </label>
-                </div>
+                <button type="submit" class="btn btn-primary btn-lg rounded-pill mt-3 mb-5 col-5 mx-auto">Sign Up</button>
             </div>
         </form>
     </div>

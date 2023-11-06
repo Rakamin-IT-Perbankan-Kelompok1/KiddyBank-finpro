@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ChildController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\TransferController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use League\CommonMark\Extension\InlinesOnly\ChildRenderer;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +26,7 @@ Route::group(['middleware' => ['NoAuth']], function () {
     Route::get('/signup', [LoginController::class, 'indexDaftar']);
     Route::post('/daftar', [LoginController::class, 'daftar']);
     Route::post('/login', [LoginController::class, 'login']);
+    // Route::get('/registerChildOTP', [ChildController::class,'otp']);
 });
 
 
@@ -35,6 +38,8 @@ Route::group(['middleware' => ['Auth']], function () {
     Route::get('profile', [LoginController::class, 'profile']);
     Route::put('update_profile', [LoginController::class, 'update_profile']);
     Route::get('transaction', [TransactionController::class,'index']);
+    Route::get('registerKids', [ChildController::class,'registerKids']);
+    Route::post('registerChild', [ChildController::class,'registerChild']);
 
 
     // login sebagai admin

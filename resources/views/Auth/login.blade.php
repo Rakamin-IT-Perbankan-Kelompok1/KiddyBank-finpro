@@ -53,7 +53,7 @@
                 </div>
                 <div class="d-flex flex-row-reverse mt-3 mb-3 text-decoration-underline">Forget Password
                 </div>
-                <button type="button " class="btn btn-primary btn-lg rounded-pill mb-5">Log In</button>
+                <button type="submit " class="btn btn-primary btn-lg rounded-pill mb-5">Log In</button>
 
                 <div class=" mx-auto">Don't have an account?
                     <label class="text-decoration-underline mb-5">
