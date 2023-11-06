@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Transaction;
 
 class TransactionController extends Controller
 {
@@ -11,9 +12,13 @@ class TransactionController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        return view('pages.transaction');
-    }
+{
+    $transactions = Transaction::all();
+
+    // Pass $transactions to the view
+    return view('pages.transaction', ['transactions' => $transactions]);
+}
+
 
     /**
      * Show the form for creating a new resource.
@@ -34,8 +39,15 @@ class TransactionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id_transaction)
     {
+        $transaction = transaction::find($id_transaction);
+
+        if (!$transaction) {
+            // Handle jika transaksi tidak ditemukan
+            return redirect()->route('transactions.index')->with('error', 'Transaksi tidak ditemukan');
+        }
+        return view('transaction.show', ['transaction' => $transaction]);
         //
     }
 
