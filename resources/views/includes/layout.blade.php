@@ -91,11 +91,7 @@
                     <img src="{{ asset('assets/img/transaction.png') }}" alt="Transaction" style="width: 18px;">
                     <span style=" font-size:18px; margin-top:3px; margin-left:6px;">Transaction</span></a>
             </li>
-            <li class="nav-item  py-2">
-                <a class="nav-link" href="{{ url('transfer') }}">
-                    <img src="{{ asset('assets/img/Saving.png') }}" alt="Saving" style="width: 18px;">
-                    <span style=" font-size:18px; margin-top:3px; margin-left:6px;">Saving</span></a>
-            </li>
+            
 
             @if (session()->get('role') == 'parent')
                 <li class="nav-item  py-2">
