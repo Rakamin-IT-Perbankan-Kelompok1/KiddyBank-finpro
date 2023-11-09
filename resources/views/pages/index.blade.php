@@ -5,8 +5,6 @@
         <h5 style="font-weight:300;">Have a great day! Good luck on your financial journey.</h5>
 
         <!-- Page Heading -->
-
-
         <!-- Content Row -->
         <div class="row" style="height:1000px">
             <div class="col-6">
@@ -48,23 +46,27 @@
                 <h3 class="mt-5 fst-italic">Recent Transactions</h3>
                 <div class="container">
                     <div class="row">
-                        <div class="col-xl-12">
+                        <div class="col-12">
                             <div class="list-group-item text-center item-align-center border-0">
-                                <div class="row d-flex align-items-center">
-                                    <div class="col-md-1">
-                                        <img src="{{ asset('assets/img/Janet.png') }}" alt="User Avatar"
-                                            class="img-fluid rounded-circle">
+                                <?php $i = 1; ?>
+                                @foreach ($transa as $data)
+                                    <div class="row d-flex align-items-center">
+                                        <div class="col-md-1">
+                                            <img src="{{ asset('assets/img/Janet.png') }}" alt="User Avatar"
+                                                class="img-fluid rounded-circle">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <p class="mb-3"> {{ $data->recepientName }}</p>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <p class="mb-3"> {{ $data->created_at }}</p>
+                                        </div>
+                                        <div class="col-sm-3 text-end">
+                                            <p class="mb-3">{{ $data->amount }}</p>
+                                        </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <h5 class="mb-0">{{ session('fullname') }}</h5>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p class="mb-0"> {{ session('date') }}</p>
-                                    </div>
-                                    <div class="col-md-3 text-end">
-                                        <p class="mb-0">Balance: $1,000.00</p>
-                                    </div>
-                                </div>
+                                    <?php $i++; ?>
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -109,23 +111,27 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card shadow py-2" style="border-radius: 20px; background:white;">
-                        <summary div class="card-body">
-                            <div class="row d-flex align-items-center p-2 ml-3">
-                                <div class="text-xl font-weight-light text-capitalize mb-1">
-                                    <img src="{{ asset('assets/img/user-plus.svg') }}" alt="User Avatar"
-                                        class="img-fluid rounded-circle">
+                    @if (session()->get('role') == 'parent')
+                        <div class="card shadow py-2" style="border-radius: 20px; background:white;">
+                            <summary div class="card-body">
+                                <div class="row d-flex align-items-center p-2 ml-3">
+                                    <div class="text-xl font-weight-light text-capitalize mb-1">
+                                        <img src="{{ asset('assets/img/user-plus.svg') }}" alt="User Avatar"
+                                            class="img-fluid rounded-circle">
+                                    </div>
+
+                                    <div class="col-md-6 text-end">
+                                        <a class="mb-0 text-decoration-none text-dark" href="{{ url('registerKids') }}">ADD
+                                            CHILD ACCOUNT</a>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class=""></i>
+                                    </div>
                                 </div>
-                                <div class="col-md-6 text-end">
-                                    <a class="mb-0 text-decoration-none text-dark" href="{{url('registerKids')}}">ADD CHILD ACCOUNT</a>
-                                </div>
-                                <div class="col-auto">
-                                    <i class=""></i>
-                                </div>
-                            </div>
-                        </summary>
-                    </div>
-                    
+                            </summary>
+                        </div>
+                    @endif
+
                 </div>
             </div>
             <!-- Content Row -->

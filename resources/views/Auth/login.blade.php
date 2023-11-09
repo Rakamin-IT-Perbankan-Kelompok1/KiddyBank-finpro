@@ -31,7 +31,7 @@
         </div>
         <div class="title">Welcome Back</div>
 
-        <form action="{{ url('login') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ url('/login') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="d-flex justify-content-center flex-column col-5 mx-auto">
                 <div class="input-group mb-4">

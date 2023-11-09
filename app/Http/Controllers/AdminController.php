@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Child;
+use App\Models\Transaction;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Users_Data;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -15,7 +19,23 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('pages.index');
+        $data = Transaction::paginate(3);
+        
+        $result = User::where('email', session('email'))->first();
+        $child = Child::where('email', session('email'))->first();
+
+        $transa = Transaction::all();
+
+        $db = DB::table('users')
+        ->select('*')
+        ->join('bankaccount','bankaccount.user_id','=','users.id')
+        ->join('child', 'child.id_user', '=', 'users.id')
+        ->join('transactions', 'transactions.acountNumber', '=', 'bankaccount.account_number')
+        ->where('users.id', '=', $result->id)
+        ->get('users.*');
+
+        
+        return view('pages.index', compact('data', 'db', 'transa'));
     }
 
     /**

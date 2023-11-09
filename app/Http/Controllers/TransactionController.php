@@ -12,12 +12,13 @@ class TransactionController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-{
-    $transactions = Transaction::all();
+    {
+        $data = Transaction::all();
 
-    // Pass $transactions to the view
-    return view('pages.transaction', ['transactions' => $transactions]);
-}
+
+        // Pass $transactions to the view
+        return view('pages.transaction', ['collection' => $data]);
+    }
 
 
     /**
@@ -41,13 +42,13 @@ class TransactionController extends Controller
      */
     public function show(string $id_transaction)
     {
-        $transaction = transaction::find($id_transaction);
+        $transaction = Transaction::find($id_transaction);
 
         if (!$transaction) {
             // Handle jika transaksi tidak ditemukan
             return redirect()->route('transactions.index')->with('error', 'Transaksi tidak ditemukan');
         }
-        return view('transaction.show', ['transaction' => $transaction]);
+        return view('transaction.show')->with('data', $transaction);
         //
     }
 

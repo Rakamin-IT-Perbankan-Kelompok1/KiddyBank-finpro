@@ -26,22 +26,27 @@ Route::group(['middleware' => ['NoAuth']], function () {
     Route::get('/signup', [LoginController::class, 'indexDaftar']);
     Route::post('/daftar', [LoginController::class, 'daftar']);
     Route::post('/login', [LoginController::class, 'login']);
-    // Route::get('/registerChildOTP', [ChildController::class,'otp']);
+    Route::get('/enterOTP', [ChildController::class, 'showOTP']);
+    Route::post('/verifyOTP', [ChildController::class, 'verifyOTP']);
+    // Route::post('verifyOTP', [ChildController::class,'verifyOTP']);
+
 });
 
 
 // masuk ke dashboard
 Route::group(['middleware' => ['Auth']], function () {
     Route::get('dashboard', [AdminController::class, 'index']);
-    Route::get('transfer', [TransferController::class, 'index']);
+    Route::get('transfers', [TransferController::class, 'index']);
+    Route::post('/transfer', [TransferController::class,'transfer']);
     Route::get('logout', [LoginController::class, 'logout']);
     Route::get('profile', [LoginController::class, 'profile']);
     Route::put('update_profile', [LoginController::class, 'update_profile']);
     Route::get('transaction', [TransactionController::class,'index']);
     Route::get('registerKids', [ChildController::class,'registerKids']);
     Route::post('registerChild', [ChildController::class,'registerChild']);
-
-
+    
+    // Route::post('/verifyOTP', [ChildController::class, 'verifyOTP'])->name('verifyOTP');
+   
     // login sebagai admin
     Route::group(['middleware' => ['HanyaAdmin']], function (){
         Route::get('user', [UserController::class, 'index']);

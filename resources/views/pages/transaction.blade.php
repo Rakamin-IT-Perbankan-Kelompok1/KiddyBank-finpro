@@ -4,7 +4,7 @@
 @endsection
 @section('content')
     <div class="row d-flex">
-        @if (session()->get('role') == 'parent')
+        {{-- @if (session()->get('role') == 'parent') --}}
             <div class="col-12">
                 <div class="d-flex justify-content-center">
                     <div class="container text-center">
@@ -21,20 +21,24 @@
                             </thead>
                             <tbody>
                                 <!-- Add rows (tr) and data (td) here for each transaction -->
-                                <tr>
-                                    <td><img src="transaction_image.jpg" alt="Transaction Image"></td>
-                                    <td>John Doe</td>
-                                    <td>2023-11-02</td>
-                                    <td>1234567890</td>
-                                    <td>$100.00</td>
-                                    <td>Completed</td>
-                                </tr>
-                                <!-- Add more rows as needed -->
+                                <?php $i = 1; ?>
+                                @foreach ($collection as $item)
+                                    <tr>
+                                        <td><img src={{ asset('assets/img/Janet.png') }} alt="Transaction Image"></td>
+                                        <td>{{ $item->acountNumber }}</td>
+                                        <td>{{ $item->created_at }}</td>
+                                        <td>{{ $item->recipientAccount }}</td>
+                                        <td>{{ $item->amount }}</td>
+                                        <td>{{ $item->transaction_status }}</td>
+                                    </tr>
+                                    <!-- Add more rows as needed -->
+                                    <?php $i++; ?>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-        @endif
+        {{-- @endif --}}
     </div>
 @endsection

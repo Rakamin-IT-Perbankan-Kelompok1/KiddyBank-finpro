@@ -20,6 +20,7 @@ class Auth
         if(!isset($sesi)){
             return redirect()->to('/');
         }
+
         return $next($request);
     }
 }

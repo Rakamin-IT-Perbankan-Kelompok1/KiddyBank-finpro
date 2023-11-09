@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transfer', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('sender_account');
-            $table->string('recipient_account');
+            $table->string('acountNumber', 20);
             $table->decimal('amount', 10, 2);
-            $table->timestamp('timestamp')->useCurrent();
-            // Tambahkan kolom lain sesuai kebutuhan Anda
-
-            $table->timestamps();
+            $table->string('recipientAccount', 20);
+            $table->string('senderName');
+            $table->string('recepientName');
+            $table->string('transaction_status', 20);
+            $table->timestamp('created_at');
         });
     }
 
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('transfer');
+        Schema::dropIfExists('transactions');
     }
 };

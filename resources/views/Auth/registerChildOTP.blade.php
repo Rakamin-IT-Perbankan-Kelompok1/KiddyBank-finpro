@@ -18,61 +18,74 @@
 </head>
 
 
-{{-- <head>
-    <title>Buat Akun Anak</title>
-</head>
 <body>
-    <h1>Buat Akun Anak</h1>
-    <form action="proses_pendaftaran.php" method="post">
-        <label for="nama_anak">Nama Anak:</label>
-        <input type="text" id="nama_anak" name="nama_anak" required><br><br>
 
-        <label for="email_anak">Email Anak:</label>
-        <input type="email" id="email_anak" name="email_anak" required><br><br>
+    <div class="container-custom">
+        @if (session('success'))
+            <p>{{ session('success') }}</p>
+        @endif
+        @if (session('error'))
+            <p>{{ session('error') }}</p>
+        @endif
+        <div class="appName">
+            <img src="{{ asset('assets/img/logo.png') }}" alt="KiddyBank">
+            KiddyBank
+        </div>
+        <div class="title">One Time Password</div>
+        <p class="text-center">We have sent an OTP to your parents, please ask</p>
+        <p class="text-center">them about the OTP that should be used</p>
 
-        <label for="saldo_awal">Saldo Awal:</label>
-        <input type="number" id="saldo_awal" name="saldo_awal" required><br><br>
-
-        <input type="submit" value="Buat Akun">
-    </form>
-</body> --}}
-
-
-<body>
-    <div class="modal-body d-flex mx-auto text-center flex-column " style="width: 500px; height:500px;">
-        <h1 style="color : black; font-weight:bold;">One Time Password</h1>
-        <p>We have sent an OTP to your parents, please ask them about the OTP that should be used</p>
-        {{-- <img src={{ asset('assets/img/success.png') }} alt="Success" /> --}}
-        <form>
-            <div class="form-row ">
-                <div class="col text-center">
-                    <input type="number" class="form-control" placeholder=" " required maxlength="1"
-                        style="width:60px;height:60px">
+     
+        <form action="{{ url('/verifyOTP') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="d-flex justify-content-center flex-row mx-auto gap-4 mt-5 ">
+                <div class="text-center shadow">
+                    <input type="number" name="otp[]" class="form-control text-center fs-2" placeholder=" " required maxlength="1"
+                        oninput="moveToNext(this, 'next-input')" style="width:80px;height:80px">
                 </div>
-                <div class="col">
-                    <input type="number" class="form-control" placeholder=" " required maxlength="1"
-                        style="width:60px;height:60px">
+                <div class="text-center shadow">
+                    <input type="number" name="otp[]" class="form-control next-input text-center fs-2" placeholder=" " required maxlength="1"
+                        oninput="moveToNext(this, 'next-input')" style="width:80px;height:80px">
                 </div>
-                <div class="col">
-                    <input type="number" class="form-control" placeholder=" " required maxlength="1"
-                        style="width:60px;height:60px">
+                <div class="text-center shadow">
+                    <input type="number" name="otp[]" class="form-control next-input text-center fs-2" placeholder=" " required maxlength="1"
+                        oninput="moveToNext(this, 'next-input')" style="width:80px;height:80px">
                 </div>
-                <div class="col">
-                    <input type="number" class="form-control" placeholder=" " required maxlength="1"
-                        style="width:60px;height:60px">
+                <div class="text-center shadow">
+                    <input type="number" name="otp[]" class="form-control next-input text-center fs-2" placeholder=" " required maxlength="1"
+                        oninput="moveToNext(this, 'next-input')" style="width:80px;height:80px">
                 </div>
-                <div class="col">
-                    <input type="number" class="form-control" placeholder=" " required maxlength="1"
-                        style="width:60px;height:60px">
+                <div class="text-center shadow">
+                    <input type="number" name="otp[]" class="form-control next-input text-center fs-2" placeholder=" " required maxlength="1"
+                        oninput="moveToNext(this, 'next-input')" style="width:80px;height:80px">
                 </div>
-                <div class="col">
-                    <input type="number" class="form-control" placeholder=" " required maxlength="1"
-                        style="width:60px;height:60px">
+                <div class="text-center shadow">
+                    <input type="number" name="otp[]" class="form-control next-input text-center fs-2" placeholder=" " required maxlength="1"
+                        oninput="moveToNext(this, 'next-input')" style="width:80px;height:80px">
                 </div>
             </div>
-        </form>
+            <button type="submit" class="d-flex justify-content-center align-items-center btn btn-primary btn-lg rounded-pill  mb-5 col-5 mx-auto" style="height: 60px; margin-top:100px;">Login</button>
 
+        </form>
     </div>
+
+    <script>
+        function moveToNext(input, nextInputClass) {
+            const maxLength = parseInt(input.getAttribute("maxlength"), 10);
+            const value = input.value;
+
+            if (value.length >= maxLength) { // Use greater than or equal to (>=) to allow only one digit
+                input.value = value.charAt(0);
+                
+                const nextInput = input.parentElement.nextElementSibling.querySelector(`.${nextInputClass}`);
+                if (nextInput) {
+                    nextInput.focus();
+                }
+            }
+        }
+    </script>
+
+
 </body>
 
 </html>

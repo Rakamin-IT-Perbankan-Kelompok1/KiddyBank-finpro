@@ -18,6 +18,12 @@ class Users_Data extends Model
     {
         return $this->hasOne(AccountBank::class, 'id');
     }
+    public function child()
+    {
+        return $this->hasMany(Child::class);
+    }
+
+
 
     // public function children() {
     //     return $this->hasMany(Child::class);

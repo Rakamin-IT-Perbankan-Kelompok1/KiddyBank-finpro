@@ -20,6 +20,7 @@ class NoAuth
         if(isset($sesi)){
             return redirect()->to('dashboard');
         }
+     
         return $next($request);
     }
 }

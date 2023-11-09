@@ -81,8 +81,8 @@
                     <img src="{{ asset('assets/img/dashboard3.svg') }}" class="{{ Request::is('dashboard') ? 'active' : '' }}" alt="Dashboard" style="width: 18px; ">
                     <span class="{{ Request::is('dashboard') ? 'active' : '' }}" style="font-size:18px; margin-top:3px; margin-left:6px;">Dashboard</span></a>
             </li>
-            <li class="nav-item py-2 {{ Request::is('transfer') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ url('transfer') }}">
+            <li class="nav-item py-2 {{ Request::is('transfers') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ url('transfers') }}">
                     <img src="{{ asset('assets/img/transfer.png') }}" alt="Transfer" style="width: 18px;">
                     <span style=" font-size:18px; margin-top:3px; margin-left:6px;">Transfer</span></a>
             </li>

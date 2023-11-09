@@ -4,7 +4,7 @@
 @endsection
 @section('content')
     <div class="row">
-        @if (session()->get('role') == 'parent')
+        {{-- @if (session()->get('role') == 'parent')
             <div class="col-3 border ">
                 <div class="h1 text-center">To Kids</div>
                 <div class="d-flex justify-content-center ml-3">
@@ -32,7 +32,7 @@
                     </div>
                 </div>
             </div>
-        @endif
+        @endif --}}
 
         <div class="container-fluid d-flex justify-content-center col-9">
             <!-- Page Heading -->
@@ -51,45 +51,47 @@
                                 {{ session()->get('error') }}
                             </div>
                         @endif
-                        <form action="{{ url('update_profile') }}" method="POST" class="">
+                        <form action="{{ url('/transfer') }}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            @method('PUT')
                             <div class=" row" style="margin-left: 75px; margin-bottom:50px;">
-                                <label for="accountNumber" class="col-form-label"
+                                <label for="acountNumber" class="col-form-label"
                                     style="padding-left: 0px; padding-right: 20px; font-weight:700; ">From
                                     Account Number </label>
                                 <div class="col-form-label">
-                                    <label for="accountNumber" class="col-sm-7"
+                                    <label for="acountNumber" class="col-sm-7"
                                         style="padding-left: 0px; padding-right: 20px;">
                                         :
                                     </label>
                                 </div>
                                 <div class="col-sm-7 border-bottom" style="padding: 0px">
-                                    <input type="text" class="form-control-plaintext" id="accountNumber" placeholder="">
+                                    <input type="text" class="form-control-plaintext" id="acountNumber"
+                                        name="acountNumber" placeholder="">
                                 </div>
                             </div>
+                            
                             <div class=" row" style="margin-left: 75px; margin-bottom:50px;">
-                                <label for="balance" class="col-form-label"
+                                <label for="amount" class="col-form-label"
                                     style="padding-left: 0px; padding-right: 20px; font-weight:700">Rp
                                 </label>
                                 <div class="col-form-label">
-                                    <label for="balance" class="col-sm-7"
+                                    <label for="amount" class="col-sm-7"
                                         style="padding-left: 145px; padding-right: 20px;">
                                         :
                                     </label>
                                 </div>
                                 <div class="col-sm-7 border-bottom" style="padding: 0px">
-                                    <input type="text" class="form-control-plaintext" id="balance" placeholder=" ">
+                                    <input type="text" class="form-control-plaintext" id="amount" name="amount"
+                                        placeholder=" ">
                                 </div>
                             </div>
                             <div class=" row" style="margin-left: 75px; margin-bottom:50px;">
-                                <label for="account" class="col-form-label"
+                                <label for="recipientAccount" class="col-form-label"
                                     style="padding-left: 0px; padding-right: 20px; font-weight:700">To Account Number
                                 </label>
                             </div>
                             <div class="d-flex align-items-center form-check row"
                                 style="margin-left: 75px; margin-bottom:50px;">
-                                <input class="form-check-input" type="radio" name="account" id="fromlist">
+                                <input class="form-check-input" type="radio" name="recipientAccount" id="fromlist">
                                 <label class="form-check-label" for="fromlist">
                                     From List
                                 </label>
@@ -99,13 +101,13 @@
                                     </label>
                                 </div>
                                 <div class="col-sm-7 border-bottom" style="padding: 0px">
-                                    <input type="text" class="form-control-plaintext" id="fromlistInput" placeholder=" "
-                                        readonly disabled>
+                                    <input type="text" class="form-control-plaintext" id="fromlistInput"
+                                        name="recipientAccount" placeholder=" " readonly disabled>
                                 </div>
                             </div>
                             <div class="d-flex align-items-center form-check row"
                                 style="margin-left:75px;margin-bottom:50px;">
-                                <input class="form-check-input" type="radio" name="account" id="recipient">
+                                <input class="form-check-input" type="radio" name="recipientAccount" id="recipient">
                                 <label class="form-check-label" for="recipient">
                                     Recipient
                                 </label>
@@ -117,38 +119,29 @@
                                 </div>
                                 <div class="col-sm-7 border-bottom" style="padding: 0px">
                                     <input type="text" class="form-control-plaintext" id="recipientInput"
-                                        placeholder=" " readonly disabled>
+                                        name="recipientAccount" placeholder=" " readonly disabled>
                                 </div>
                             </div>
                             <div class="row" style="margin-left: 75px;margin-bottom:50px;">
-                                <label for="destinedBank" class="col-form-label"
-                                    style="padding-left: 0px; padding-right: 20px; font-weight:700">Destined Bank
+                                <label for="recepientName" class="col-form-label"
+                                    style="padding-left: 0px; padding-right: 50px; font-weight:700">Recepient Name
                                 </label>
                                 <div class="col-form-label">
-                                    <label for="destinedBank" class="col-sm-7"
-                                        style="padding-left: 60px; padding-right: 20px;">
+                                    <label for="recepientName" class="col-sm-7"
+                                        style="padding-left: 15px; padding-right: 20px;">
                                         :
                                     </label>
                                 </div>
                                 <div class="col-sm-7 border-bottom" style="padding: 0px">
-                                    <input type="text" class="form-control-plaintext" id="destinedBank"
-                                        placeholder=" " maxlength="1">
+                                    <select class="form-control-plaintext" id="recepientName" name="recepientName">
+                                        @foreach ($child as $data)
+                                            <option value="{{ $data->child_fullname }}">
+                                                {{ $data->child_fullname }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
-                            </div>
-                            <div class=" row" style="margin-left: 75px;margin-bottom:50px;">
-                                <label for="accountTransfer" class="col-form-label"
-                                    style="padding-left: 0px; padding-right: 20px;font-weight:700">Account Number
-                                </label>
-                                <div class="col-form-label">
-                                    <label for="accountTransfer" class="col-sm-7"
-                                        style="padding-left: 45px; padding-right: 20px;">
-                                        :
-                                    </label>
-                                </div>
-                                <div class="col-sm-7 border-bottom" style="padding: 0px">
-                                    <input type="text" class="form-control-plaintext" id="accountTransfer"
-                                        placeholder=" ">
-                                </div>
+                                <input type="text" class="form-control-plaintext" id="senderName"
+                                        name="senderName" value="{{session('fullname')}}" placeholder="" hidden>
                             </div>
                             <div class="row" style="margin-left: 75px;margin-bottom:50px;">
                                 <label for="customerReferences" class="col-form-label"
@@ -162,12 +155,12 @@
                                 </div>
                                 <div class="col-sm-7 border-bottom" style="padding: 0px">
                                     <input type="text" class="form-control-plaintext" id="customerReferences"
-                                        placeholder=" ">
+                                        name="customerReferences" placeholder=" ">
                                 </div>
                             </div>
                             <div class="d-flex justify-content-end mt-5">
-                                <button class=" btn btn-primary" style="width:150px; margin-right:50px;" type="button"
-                                    data-toggle="modal" data-target="#otpModel">Send</button>
+                                <button class=" btn btn-primary" style="width:150px; margin-right:50px;" type="submit"
+                                    data-toggle="modal" data-target="">Send</button>
                             </div>
                         </form>
                     </div>
@@ -212,7 +205,7 @@
             </div>
         </div>
     </div> --}}
-        <div class="modal fade bd-example-modal-lg" id="otpModel" tabindex="-1" role="dialog"
+        {{-- <div class="modal fade bd-example-modal-lg" id="otpModel" tabindex="-1" role="dialog"
             aria-labelledby="successModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
@@ -224,7 +217,6 @@
                     <div class="modal-body d-flex mx-auto text-center flex-column " style="width: 500px; height:500px;">
                         <h1 style="color : black; font-weight:bold;">One Time Password</h1>
                         <p>We have sent an OTP to your parents, please ask them about the OTP that should be used</p>
-                        {{-- <img src={{ asset('assets/img/success.png') }} alt="Success" /> --}}
                         <form>
                             <div class="form-row ">
                                 <div class="col text-center">
@@ -261,7 +253,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <style>
             input[type="number"]::-webkit-outer-spin-button,

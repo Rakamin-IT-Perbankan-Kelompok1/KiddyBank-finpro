@@ -6,15 +6,25 @@ use Illuminate\Database\Eloquent\Model;
 
 class Transaction extends Model
 {
-    protected $table = 'transaction'; // Gantilah 'nama_tabel_anda' dengan nama tabel di database Anda
-
+    // Gantilah 'nama_tabel_anda' dengan nama tabel di database Anda
+    public $incrementing = true;
+    protected $primaryKey = 'id';
+    public $timestamps = false;
     protected $fillable = [
-        'id_transaction',
-        'image',
-        'recipient_name',
-        'transaction_date',
-        'account_number',
+        'acountNumber',
         'amount',
+        'recipientAccount',
         'transaction_status',
+        'created_at',
     ];
+    protected $table = 'transactions';
+
+    public function transfer()
+    {
+        return $this->belongsTo(AccountBank::class, 'account_number', 'acountNumber');
+    }
+    // public function transaction()
+    // {
+    //     return $this->hasMany(Child::class);
+    // }
 }

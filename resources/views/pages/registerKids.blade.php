@@ -58,7 +58,7 @@
                 <div class="input-group mb-4 ">
                     <input type="text"
                         class="form-control-lg col-5 border border-0 shadow p-3 bg-body-tertiary rounded mx-auto"
-                        name="username" placeholder="Username" aria-label="username" aria-describedby="basic-addon1" required>
+                        name="child_username" placeholder="Username" aria-label="username" aria-describedby="basic-addon1" required>
                     @error('username')
                         <small>{{ $message }}</small>
                     @enderror
@@ -66,7 +66,7 @@
                 <div class="input-group mb-3">
                     <input type="text"
                         class="form-control-lg col-5 border border-0 shadow p-3 bg-body-tertiary rounded mx-auto"
-                        name="fullname" placeholder="Full Name" aria-label="fullname" aria-describedby="basic-addon1"
+                        name="child_fullname" placeholder="Full Name" aria-label="fullname" aria-describedby="basic-addon1"
                         required>
                     @error('fullname')
                         <small>{{ $message }}</small>

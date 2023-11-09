@@ -3,13 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Mail\SendOTP;
 use App\Models\AccountBank;
 use App\Models\Child;
+use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Users_Balance;
 use App\Models\Users_Data;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class LoginController extends Controller
 {
@@ -130,12 +135,18 @@ class LoginController extends Controller
             'password.required' => 'password harus diisi'
         ]);
 
+
         $email = $request->email;
         $password = $request->password;
 
+
+
         $result = User::where('email', $email)->first();
         $child = Child::where('email', $email)->first();
+
+
         if ($result && !$child) {
+            // dd("sasasa");
             if (password_verify($password, $result->password)) {
                 if ($result->role == "admin") {
                     $level = "admin";
@@ -166,13 +177,79 @@ class LoginController extends Controller
                     'date' => $date,
                 ]);
 
-                return redirect()->to('dashboard');
+                $data = Transaction::paginate(3);
+                // dd($result->id);
+               
+                // dd($db);   
+
+                return redirect('dashboard');
             } else {
                 return redirect()->to('/')->with('error', 'Email Atau Password Salah');
             }
         } else if ($child && !$result) {
+
+            try {
+                session([
+                    'otp' => $child->otp,
+                    'id' => $child->id
+                ]);
+            } catch (\Throwable $th) {
+                throw $th;
+            }
+
             if (password_verify($password, $child->password)) {
 
+                // dd(session($child->otp));
+                if (!empty($child->otp)) {
+                    // dd(!empty($child->otp));
+                    // dd($child->otp);
+                    // Send the OTP to the user via email
+                    // Jika pengguna "Child" belum memiliki OTP, buat OTP baru dan simpan ke database
+                    // dd($child->otp);
+                    // $child->save();
+                    // dd($request->otp)
+                    // dd('sasa');
+                    if ($child->activated == 1) {
+
+                        $userBalance = AccountBank::where('id', $child->id)->first();
+                        $accountNumber = $userBalance->account_number;
+                        $date = date('Y-m-d', strtotime($child->created_at));
+                        if ($userBalance) {
+                            $balanceAmount = $userBalance->balance;
+                        } else {
+                            $balanceAmount = 0;
+                        }
+                        session([
+
+                            'login' => true,
+                            'username' => $child->child_username,
+                            'fullname' => $child->child_fullname,
+                            'email' => $child->email,
+                            'role' => 'Child',
+                            'id' =>  $child->id,
+                            'otp' => $child->otp,
+                            'account_number' => $accountNumber,
+                            'date' => $date,
+                        ]);
+                        
+                        $data = Transaction::paginate(3);
+                        return redirect('dashboard', compact('data'));
+                    }
+
+                    return redirect()->to('/enterOTP')->with('success');
+                } else {
+                    // Jika pengguna "Child" sudah memiliki OTP, periksa apakah OTP yang dimasukkan benar
+                    if ($child->otp == $request->otp) {
+
+                        // Hapus OTP dari database
+                        $child->otp = null;
+                        $child->activated = 1;
+                        $child->save();
+                        return redirect()->to('dashboard');
+                    } else {
+                        return redirect()->to('enterOTP')->with('error', 'Invalid OTP. Please try again.');
+                    }
+                }
                 // $userBalance = AccountBank::where('id', $result->id)->first();
                 // $accountNumber = $userBalance->account_number;
                 // $date = date('Y-m-d', strtotime($result->created_at));
@@ -182,7 +259,9 @@ class LoginController extends Controller
 
                 // }
                 $balanceAmount = 0;
+
                 session([
+
                     'login' => true,
                     'username' => $child->username,
                     'fullname' => $child->fullname,
@@ -190,16 +269,21 @@ class LoginController extends Controller
                     'role' => 'Child',
                     'id' =>  $child->id,
                     'balance' => $balanceAmount,
+                    'otp' => $child->otp,
                     // 'account_number' => $accountNumber,
                     // 'date' => $date,
                 ]);
-                return view('Auth.registerChildOTP');
-                // return redirect()->to('dashboard');
+
+                $data = Transaction::paginate(3);
+                // dd($data);
+
+                return view('pages.index', ['data' => $data]);
+                // return redirect('Auth.registerChildOTP');
             } else {
-                return redirect()->to('/')->with('error', 'Email Atau Password Salah');
+                return redirect('/')->with('error', 'Email Atau Password Salah');
             }
         } else {
-            return redirect()->to('/')->with('error', 'akun tidak ditemukan');
+            return redirect('/')->with('error', 'akun tidak ditemukan');
         }
     }
 
