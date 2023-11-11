@@ -28,7 +28,7 @@
             <p>{{ session('error') }}</p>
         @endif
         <div class="appName">
-            <img src="{{ asset('assets/img/logo.png') }}" alt="KiddyBank">
+            <img src="{{ asset('assets/img/logo.jpg') }}" alt="KiddyBank" style="height: 60px; weight:60px">
             KiddyBank
         </div>
         <div class="title">One Time Password</div>

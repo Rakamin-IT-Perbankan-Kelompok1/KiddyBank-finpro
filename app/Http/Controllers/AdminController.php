@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\AccountBank;
 use App\Models\Child;
 use App\Models\Transaction;
 use App\Models\User;
@@ -19,23 +20,55 @@ class AdminController extends Controller
      */
     public function index()
     {
+
+        //dd(session('id_accountbank'));
         $data = Transaction::paginate(3);
-        
-        $result = User::where('email', session('email'))->first();
-        $child = Child::where('email', session('email'))->first();
 
-        $transa = Transaction::all();
+        $data_child = DB::table('transactions')
+            ->join('bankaccount', 'bankaccount.id', '=', 'transactions.id_bankaccount')
+            ->where('id_bankaccount', '=', session('id_accountbank'))
+            ->where('account_type', '=', session('account_type'))
+            ->get('transactions.*');
 
-        $db = DB::table('users')
-        ->select('*')
-        ->join('bankaccount','bankaccount.user_id','=','users.id')
-        ->join('child', 'child.id_user', '=', 'users.id')
-        ->join('transactions', 'transactions.acountNumber', '=', 'bankaccount.account_number')
-        ->where('users.id', '=', $result->id)
-        ->get('users.*');
+        $data_parent = DB::table('transactions')
+            ->join('bankaccount', 'bankaccount.id', '=', 'transactions.id_bankaccount')
+            ->join('child', 'child.id', '=', 'bankaccount.user_id')
+            ->join('users', 'users.id', '=', 'child.id_user')
+            ->where('users.id', '=', session('id'))
+            ->where(function ($query) {
+                $query->where('bankaccount.account_type', '=', 'Child')
+                    ->orWhere('bankaccount.account_type', '=', 'Parent');
+            })
+            ->get(['transactions.*', 'bankaccount.account_number', 'bankaccount.balance']);
 
-        
-        return view('pages.index', compact('data', 'db', 'transa'));
+        // dd($data_parent);
+
+        // $type = 'parent';
+
+        $data_account_child = DB::table('bankaccount')
+            ->join('child', 'child.id', '=', 'bankaccount.user_id')
+            ->join('users', 'users.id', '=', 'child.id_user')
+            ->where('users.id', '=', session('id'))
+            ->where('bankaccount.account_type', '=', 'Child')
+            ->get(['child.*', 'bankaccount.account_number', 'bankaccount.balance']);
+
+        // dd($data_account_child);
+
+        $weeklyTransactions = DB::table('transactions')
+            ->select(DB::raw('SUM(amount) as total_amount'), DB::raw('WEEK(created_at) as week_number'))
+            ->where('id_bankaccount', '=', session('id_accountbank'))
+            ->groupBy(DB::raw('WEEK(created_at)'))
+            ->get();
+
+        $data_pengeluaran = [];
+        $total = 0;
+
+        foreach ($weeklyTransactions as $transaction) {
+            $total += $transaction->total_amount;
+            $data_pengeluaran[] = $transaction->total_amount;
+        }
+
+        return view('pages.index', compact('data', 'data_parent', 'data_child', 'total', 'data_pengeluaran', 'data_account_child'));
     }
 
     /**

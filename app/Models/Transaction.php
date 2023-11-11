@@ -11,9 +11,13 @@ class Transaction extends Model
     protected $primaryKey = 'id';
     public $timestamps = false;
     protected $fillable = [
+        'id_bankaccount',
         'acountNumber',
         'amount',
         'recipientAccount',
+        'senderName',
+        'recepientName',
+        'senderType',
         'transaction_status',
         'created_at',
     ];

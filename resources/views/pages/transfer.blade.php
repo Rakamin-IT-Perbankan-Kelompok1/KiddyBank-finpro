@@ -68,7 +68,7 @@
                                         name="acountNumber" placeholder="">
                                 </div>
                             </div>
-                            
+
                             <div class=" row" style="margin-left: 75px; margin-bottom:50px;">
                                 <label for="amount" class="col-form-label"
                                     style="padding-left: 0px; padding-right: 20px; font-weight:700">Rp
@@ -95,6 +95,7 @@
                                 <label class="form-check-label" for="fromlist">
                                     From List
                                 </label>
+
                                 <div class="col-form-label ">
                                     <label for="fromlistInput" style="padding-left: 100px; padding-right: 20px;">
                                         :
@@ -133,15 +134,29 @@
                                     </label>
                                 </div>
                                 <div class="col-sm-7 border-bottom" style="padding: 0px">
-                                    <select class="form-control-plaintext" id="recepientName" name="recepientName">
-                                        @foreach ($child as $data)
-                                            <option value="{{ $data->child_fullname }}">
-                                                {{ $data->child_fullname }}</option>
+                                    <input type="text" class="form-control-plaintext" id="fromlistInput"
+                                        name="recepientName" placeholder=" " >
+                                    {{-- <select class="form-control-plaintext" id="recepientName" name="recepientName">
+                                        @foreach (session('role') === 'Child' ? $parent : $child as $data)
+                                        {{dd($data)}}
+                                            <option value="{{ $data->fullname }}">
+                                                {{ $data->fullname }}
+                                            </option>
+
+                                            @if (session('role') === 'parent')
+                                                <!-- Add an additional option for parent data -->
+                                                <option value="{{ $data->child_fullname }}">
+                                                    {{ $data->child_fullname }}
+                                                </option>
+                                            @endif
                                         @endforeach
-                                    </select>
+                                    </select> --}}
                                 </div>
-                                <input type="text" class="form-control-plaintext" id="senderName"
-                                        name="senderName" value="{{session('fullname')}}" placeholder="" hidden>
+                                <input type="text" class="form-control-plaintext" id="senderName" name="senderName"
+                                    value="{{ session('fullname') }}" placeholder="" hidden>
+                                    {{-- {{dd(session('account_type'))}} --}}
+                                <input type="text" class="form-control-plaintext" id="id_parent" name="id_parent"
+                                    value="{{ session('account_type')}}" placeholder="" hidden>
                             </div>
                             <div class="row" style="margin-left: 75px;margin-bottom:50px;">
                                 <label for="customerReferences" class="col-form-label"

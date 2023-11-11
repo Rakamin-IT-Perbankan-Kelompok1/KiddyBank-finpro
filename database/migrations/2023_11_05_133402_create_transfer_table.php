@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->string('id_bankaccount');
             $table->string('acountNumber', 20);
             $table->decimal('amount', 10, 2);
             $table->string('recipientAccount', 20);
             $table->string('senderName');
             $table->string('recepientName');
+            $table->string('senderType');
             $table->string('transaction_status', 20);
             $table->timestamp('created_at');
         });

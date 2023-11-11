@@ -20,7 +20,7 @@ class Users_Data extends Model
     }
     public function child()
     {
-        return $this->hasMany(Child::class);
+        return $this->hasMany(Child::class,'id_user');
     }
 
 

@@ -148,8 +148,7 @@ class ChildController extends Controller
         $id = session('id');
         // dd('sasa');
         $user = Child::where('id', '=', $id)->first();
-        // dd($user);
-        // dd($id);
+
         $otpString = implode('', $request->otp);
         if ($user->otp === $otpString) {
             session([
@@ -163,17 +162,17 @@ class ChildController extends Controller
                 'otp' => $user->otp,
             ]);
             // OTP is valid, proceed with verification
-            $db = DB::table('users')
-            ->select('*')
-            ->join('bankaccount','bankaccount.user_id','=','users.id')
-            ->join('child', 'child.id_user', '=', 'users.id')
-            ->join('transactions', 'transactions.acountNumber', '=', 'bankaccount.account_number')
-            ->where('users.id', '=', $user->id)
-            ->get('users.*');
+            // $db = DB::table('users')
+            // ->select('*')
+            // ->join('bankaccount','bankaccount.user_id','=','users.id')
+            // ->join('child', 'child.id_user', '=', 'users.id')
+            // ->join('transactions', 'transactions.acountNumber', '=', 'bankaccount.account_number')
+            // ->where('users.id', '=', $user->id)
+            // ->get('users.*');
             $user->activated = '1';  
             $user->save();
             $data = Transaction::paginate(3);
-            return view('pages.index', compact('data', 'db'))->with('success', 'OTP verification successful');
+            return redirect()->to('dashboard')->with('success', 'OTP verification successful');
         } else {
             // dd('sasas')
             return back()->with('error', 'Invalid OTP. Please try again.');

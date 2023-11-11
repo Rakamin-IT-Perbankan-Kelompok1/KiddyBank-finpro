@@ -48,8 +48,22 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="list-group-item text-center item-align-center border-0">
+                                {{-- <
+                                @foreach (session('role') === 'parent' ? $data_parent : $data_child as $item)
+                                    <tr>
+                                        <td><img src={{ asset('assets/img/Janet.png') }} alt="Transaction Image"></td>
+                                        <td>{{ $item->recepientName }}</td>
+                                        <td>{{ $item->created_at }}</td>
+                                        <td>{{ $item->recipientAccount }}</td>
+                                        <td>{{ $item->amount }}</td>
+                                        <td>{{ $item->transaction_status }}</td>
+                                    </tr>
+                                    <!-- Add more rows as needed -->
+                                   
+                                @endforeach --}}
                                 <?php $i = 1; ?>
-                                @foreach ($transa as $data)
+                                @foreach (session('role') === 'parent' ? $data_parent : $data_child as $data)
+                                {{-- {{ dd($data) }} --}}
                                     <div class="row d-flex align-items-center">
                                         <div class="col-md-1">
                                             <img src="{{ asset('assets/img/Janet.png') }}" alt="User Avatar"
@@ -67,6 +81,51 @@
                                     </div>
                                     <?php $i++; ?>
                                 @endforeach
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Add more rows as needed -->
+                </div>
+                <h3 class="mt-5 fst-italic">Child Account</h3>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="list-group-item text-center item-align-center border-0">
+                                {{-- <
+                                @foreach (session('role') === 'parent' ? $data_parent : $data_child as $item)
+                                    <tr>
+                                        <td><img src={{ asset('assets/img/Janet.png') }} alt="Transaction Image"></td>
+                                        <td>{{ $item->recepientName }}</td>
+                                        <td>{{ $item->created_at }}</td>
+                                        <td>{{ $item->recipientAccount }}</td>
+                                        <td>{{ $item->amount }}</td>
+                                        <td>{{ $item->transaction_status }}</td>
+                                    </tr>
+                                    <!-- Add more rows as needed -->
+                                   
+                                @endforeach --}}
+                                @if (session('role') === 'parent')
+                                    {{-- {{dd($data_account_child)}} --}}
+                                    @foreach ($data_account_child as $data)
+                                    {{-- {{dd( $data )}} --}}
+                                        <div class="row d-flex align-items-center">
+                                            <div class="col-md-1">
+                                                <img src="{{ asset('assets/img/Janet.png') }}" alt="User Avatar"
+                                                    class="img-fluid rounded-circle">
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <p class="mb-3"> {{ $data->child_fullname }}</p>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <p class="mb-3"> {{ $data->account_number }}</p>
+                                            </div>
+                                            <div class="col-sm-3 text-end">
+                                                <p class="mb-3">{{ $data->balance }}</p>
+                                            </div>
+                                        </div>
+                                       
+                                    @endforeach
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -110,6 +169,7 @@
                                 <canvas id="myAreaChart"></canvas>
                             </div>
                         </div>
+
                     </div>
                     @if (session()->get('role') == 'parent')
                         <div class="card shadow py-2" style="border-radius: 20px; background:white;">
@@ -121,7 +181,8 @@
                                     </div>
 
                                     <div class="col-md-6 text-end">
-                                        <a class="mb-0 text-decoration-none text-dark" href="{{ url('registerKids') }}">ADD
+                                        <a class="mb-0 text-decoration-none text-dark"
+                                            href="{{ url('registerKids') }}">ADD
                                             CHILD ACCOUNT</a>
                                     </div>
                                     <div class="col-auto">
@@ -218,3 +279,101 @@
     @section('topbar')
         <h3 class="text-capitalize" style="color : black">Hey There, {{ session('fullname') }}</h3>
     @endsection
+
+
+    @push('scripts')
+        @php
+
+        @endphp
+        <script>
+            var ctx = document.getElementById("myAreaChart");
+            var data = @json($data_pengeluaran);
+            var myLineChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6", "Week 7", "Week 8"],
+                    datasets: [{
+                        label: "Earnings",
+                        lineTension: 0.3,
+                        backgroundColor: "rgba(78, 115, 223, 0.05)",
+                        borderColor: "rgba(78, 115, 223, 1)",
+                        pointRadius: 3,
+                        pointBackgroundColor: "rgba(78, 115, 223, 1)",
+                        pointBorderColor: "rgba(78, 115, 223, 1)",
+                        pointHoverRadius: 3,
+                        pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+                        pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+                        pointHitRadius: 10,
+                        pointBorderWidth: 2,
+                        data: data,
+                    }],
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            left: 10,
+                            right: 25,
+                            top: 25,
+                            bottom: 0
+                        }
+                    },
+                    scales: {
+                        xAxes: [{
+                            time: {
+                                unit: 'date'
+                            },
+                            gridLines: {
+                                display: false,
+                                drawBorder: false
+                            },
+                            ticks: {
+                                maxTicksLimit: 7
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                maxTicksLimit: 5,
+                                padding: 10,
+                                // Include a dollar sign in the ticks
+                                callback: function(value, index, values) {
+                                    return 'Rp.' + number_format(value);
+                                }
+                            },
+                            gridLines: {
+                                color: "rgb(234, 236, 244)",
+                                zeroLineColor: "rgb(234, 236, 244)",
+                                drawBorder: false,
+                                borderDash: [2],
+                                zeroLineBorderDash: [2]
+                            }
+                        }],
+                    },
+                    legend: {
+                        display: false
+                    },
+                    tooltips: {
+                        backgroundColor: "rgb(255,255,255)",
+                        bodyFontColor: "#858796",
+                        titleMarginBottom: 10,
+                        titleFontColor: '#6e707e',
+                        titleFontSize: 14,
+                        borderColor: '#dddfeb',
+                        borderWidth: 1,
+                        xPadding: 15,
+                        yPadding: 15,
+                        displayColors: false,
+                        intersect: false,
+                        mode: 'index',
+                        caretPadding: 10,
+                        callbacks: {
+                            label: function(tooltipItem, chart) {
+                                var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+                                return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
+                            }
+                        }
+                    }
+                }
+            });
+        </script>
+    @endpush

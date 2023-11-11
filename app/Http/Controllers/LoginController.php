@@ -143,10 +143,9 @@ class LoginController extends Controller
 
         $result = User::where('email', $email)->first();
         $child = Child::where('email', $email)->first();
-
+        
 
         if ($result && !$child) {
-            // dd("sasasa");
             if (password_verify($password, $result->password)) {
                 if ($result->role == "admin") {
                     $level = "admin";
@@ -155,7 +154,13 @@ class LoginController extends Controller
                 } else {
                     return redirect("/")->with("error", "Role Not Found");
                 }
+                $id_bank = DB::table('bankaccount')
+                ->join('users','users.id','=','bankaccount.user_id')
+                ->where('user_id','=', $result->id )
+                ->where('account_type','=','parent' )
+                ->get('bankaccount.*');
 
+               
                 $userBalance = AccountBank::where('id', $result->id)->first();
                 $accountNumber = $userBalance->account_number;
                 $date = date('Y-m-d', strtotime($result->created_at));
@@ -171,12 +176,14 @@ class LoginController extends Controller
                     'fullname' => $result->fullname,
                     'email' => $result->email,
                     'role' => $level,
+                    'account_type'=> $id_bank[0]->account_type,
                     'id' =>  $result->id,
                     'balance' => $balanceAmount,
+                    'id_accountbank'=> $id_bank[0]->id,
                     'account_number' => $accountNumber,
                     'date' => $date,
                 ]);
-
+               
                 $data = Transaction::paginate(3);
                 // dd($result->id);
                
@@ -204,13 +211,23 @@ class LoginController extends Controller
                     // dd(!empty($child->otp));
                     // dd($child->otp);
                     // Send the OTP to the user via email
+                    
                     // Jika pengguna "Child" belum memiliki OTP, buat OTP baru dan simpan ke database
                     // dd($child->otp);
                     // $child->save();
                     // dd($request->otp)
                     // dd('sasa');
+                    
                     if ($child->activated == 1) {
+                        $id_bank = DB::table('bankaccount')
+                            ->join('child','child.id','=','bankaccount.user_id')
+                            ->where('user_id', '=', $child->id )
+                            ->where('account_type','=','Child' )
+                            ->get('bankaccount.*');
 
+                        // dd($id_bank[0]->account_type);
+                            
+                            
                         $userBalance = AccountBank::where('id', $child->id)->first();
                         $accountNumber = $userBalance->account_number;
                         $date = date('Y-m-d', strtotime($child->created_at));
@@ -219,6 +236,7 @@ class LoginController extends Controller
                         } else {
                             $balanceAmount = 0;
                         }
+
                         session([
 
                             'login' => true,
@@ -226,23 +244,47 @@ class LoginController extends Controller
                             'fullname' => $child->child_fullname,
                             'email' => $child->email,
                             'role' => 'Child',
+                            'id_user' => $child->id_user,
                             'id' =>  $child->id,
                             'otp' => $child->otp,
+                            'account_type' => $id_bank[0]->account_type,
                             'account_number' => $accountNumber,
+                            'id_accountbank'=> $id_bank[0]->id,
                             'date' => $date,
                         ]);
                         
                         $data = Transaction::paginate(3);
-                        return redirect('dashboard', compact('data'));
+                        return redirect('dashboard');
                     }
 
                     return redirect()->to('/enterOTP')->with('success');
                 } else {
                     // Jika pengguna "Child" sudah memiliki OTP, periksa apakah OTP yang dimasukkan benar
-                    if ($child->otp == $request->otp) {
+                    $userBalance = AccountBank::where('id', $child->id)->first();
+                            //   dd('');
+                            $id_bank = DB::table('bankaccount')
+                            ->join('child','child.id','=','bankaccount.user_id')
+                            ->where('user_id', '=', $child->id )
+                            ->where('account_type','=','Child' )
+                            ->get('bankaccount.*');
 
+                    session([
+                        'login' => true,
+                        'username' => $child->child_username,
+                        'fullname' => $child->child_fullname,
+                        'email' => $child->email,
+                        'role' => 'Child',
+                        'id_user' => $child->id_user,
+                        'id' =>  $child->id,
+                        'otp' => $child->otp,
+                        'account_type' =>$id_bank[0]->account_type,
+                        'account_number' => $userBalance->account_number,
+                        'id_accountbank'=> $id_bank[0]->id,
+                    ]);
+                    if ($child->otp == $request->otp) {
+                        
                         // Hapus OTP dari database
-                        $child->otp = null;
+                        // $child->otp = null;
                         $child->activated = 1;
                         $child->save();
                         return redirect()->to('dashboard');
@@ -251,13 +293,22 @@ class LoginController extends Controller
                     }
                 }
                 // $userBalance = AccountBank::where('id', $result->id)->first();
+               
                 // $accountNumber = $userBalance->account_number;
                 // $date = date('Y-m-d', strtotime($result->created_at));
                 // if ($userBalance) {
                 //     $balanceAmount = $userBalance->balance;
                 // } else {
+                   
+
 
                 // }
+                $id_bank = DB::table('bankaccount')
+                ->join('child','child.id','=','bankaccount.user_id')
+                ->where('user_id', '=', $child->id )
+                ->where('account_type','=','Child' )
+                ->get('bankaccount.*');
+
                 $balanceAmount = 0;
 
                 session([
@@ -267,10 +318,13 @@ class LoginController extends Controller
                     'fullname' => $child->fullname,
                     'email' => $child->email,
                     'role' => 'Child',
+                    'id_user' => $child->id_user,
                     'id' =>  $child->id,
                     'balance' => $balanceAmount,
+                    'id_accountbank'=> $id_bank[0]->id,
+                    'account_number' => $id_bank[0]->accountNumber,
                     'otp' => $child->otp,
-                    // 'account_number' => $accountNumber,
+                    'account_type' =>$id_bank[0]->account_type,
                     // 'date' => $date,
                 ]);
 

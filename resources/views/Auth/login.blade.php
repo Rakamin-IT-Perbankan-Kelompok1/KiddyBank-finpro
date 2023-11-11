@@ -25,8 +25,8 @@
         @if (session('error'))
             <p>{{ session('error') }}</p>
         @endif
-        <div class="appName">
-            <img src="{{ asset('assets/img/logo.png') }}" alt="KiddyBank">
+        <div class="appName text-center">
+            <img src="{{ asset('assets/img/logo.jpg') }}" alt="KiddyBank" style="height:150px;width:250px" class="">
             KiddyBank
         </div>
         <div class="title">Welcome Back</div>

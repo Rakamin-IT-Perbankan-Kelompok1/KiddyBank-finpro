@@ -9,6 +9,7 @@ use App\Models\Transaction;
 use App\Models\Transfer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TransferController extends Controller
 {
@@ -20,7 +21,20 @@ class TransferController extends Controller
         $child = Child::select('*')
         ->where('id_user', '=', session('id'))
         ->get('child.*');
-        return view('pages.transfer', compact('child'));
+
+        // dd(session('account_type'));
+
+        
+        $parent = DB::table('users')
+        ->select('*')
+        ->join('bankaccount','bankaccount.user_id','=','users.id')
+        ->join('child','child.id','=','users.id')
+        ->where('users.id', '=', session('id'))
+        ->where('bankaccount.account_type','=', session('account_type'))
+        ->get('users.*');
+
+        // dd($parent);
+        return view('pages.transfer', compact('child', 'parent'));
     }
 
     /**
@@ -60,24 +74,29 @@ class TransferController extends Controller
              
         // try {
             // Lakukan proses transfer
-
+            $bank = Child::where('id', '=', $request->recepientName);
+            
+           
         
             $transaction = new Transaction();
             $today = Carbon::now();
             $formattedDateTime = $today->format('Y-m-d');
+            $bank = AccountBank::where('id','=', session('id'));
 
             $transaction->acountNumber = $request->input('acountNumber');
             $transaction->recipientAccount = $request->input('recipientAccount');
             $transaction->amount = $request->input('amount');
-            // $transaction->customerReferences = $request->input('customerReferences');
+            $transaction->id_bankaccount = session()->get('id_accountbank');
             $transaction->senderName = $request->input('senderName');
             $transaction->recepientName = $request->recepientName;
+            // dd(session('account_type'));
             $transaction->transaction_status = 'success';
+            $transaction->senderType = session('account_type');
             $transaction->created_at = $formattedDateTime;
             $transaction->save();
 
-           
-
+        //    dd($transaction->id_bankaccount);
+            
 
             // Contoh: Validasi saldo cukup untuk transfer
             $senderBalance = AccountBank::where('account_number', $transaction->acountNumber)->value('balance');
@@ -95,73 +114,13 @@ class TransferController extends Controller
            
 
         //     // Redirect dengan pesan sukses
-        //     return redirect()->to('dashboard')->with('success', 'Transfer berhasil dilakukan');
+            return redirect()->to('dashboard')->with('success', 'Transfer berhasil dilakukan');
         // } catch (\Throwable $th) {
-        //     return redirect()->back()->with('error', 'gagal brow'); // Assuming you have a view file for creating posts
+            return redirect()->back()->with('error', 'gagal brow'); // Assuming you have a view file for creating posts
         // }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    // public function transfer(Request $request)
-    // {
-    //     // Validasi input
-    //     $request->validate([
-    //         'accountNumber' => 'required|max:255|',
-    //         'recipientAccount' => 'required|max:255|',
-    //         'amount' => 'required|numeric',
-    //         'customerReferences' => 'required|max:255|',
-    //     ], [
-    //         'accountNumber' => 'account harus diisi',
-    //         'accountNumber' => 'karakter account terlalu panjang',
-
-    //         'recipientAccount' => 'recipientAccount harus diisi',
-    //         'recipientAccount' => 'karakter recipientAccount terlalu panjang',
-
-    //         'amount' => 'amount harus diisi',
-    //         'amount' => 'amount harus diisi angka',
-
-    //         'customerReferences' => 'customerReferences harus diisi',
-    //         'customerReferences' => 'karakter customerReferences terlalu panjang',
-
-    //     ]);
-
-    //     // Lakukan proses transfer
-    //     $transaction = new Transaction();
-    //     $today = date("Y-m-d H:i:s");
-
-    //     // $id = session('id');
-    //     // $user = AccountBank::where('user_id', '=', $id)->first();
-
-    //     $transaction->accountNumber = $request->accountNumber;
-    //     $transaction->recipientAccount = $request->recipientAccount;
-    //     $transaction->amount = $request->amount;
-    //     $transaction->customerReferences = $request->customerReferences;
-    //     $transaction->created_at = $today;
-
-
-    //     // Contoh: Validasi saldo cukup untuk transfer
-    //     $senderBalance = AccountBank::where('account_number', $transaction->accountNumber)->value('balance');
-    //     dd($senderBalance);
-
-    //     if ($senderBalance < $transaction->amount) {
-    //         return back()->with('error', 'Saldo tidak mencukupi untuk transfer');
-    //     }
-
-    //     // Update saldo akun sumber dan akun tujuan
-    //     AccountBank::where('account_number', $transaction->accountNumber)->decrement('balance', $transaction->amount);
-    //     AccountBank::where('account_number', $transaction->recipientAccount)->increment('balance', $transaction->amount);
-
-    //     $transaction->save();
-
-    //     // Redirect dengan pesan sukses
-    //     return redirect()->to('transfer')->with('success', 'Transfer berhasil dilakukan');
-    // }
-
-    /**
-     * Display the specified resource.
-     */
+   
     public function show(string $id)
     {
         // Mengambil data transfer dari database berdasarkan ID

@@ -67,7 +67,7 @@
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
                 <div class="sidebar-brand-icon rotate">
-                    <img src="{{ asset('assets/img/logo.png') }}" alt="KiddyBank">
+                    <img src="{{ asset('assets/img/logo.jpg') }}" alt="KiddyBank" style="height: 70px; width:100px">
                 </div>
                 <div class="sidebar-brand-text mx-3" style="color: black">KiddyBank</div>
             </a>
@@ -86,13 +86,13 @@
                     <img src="{{ asset('assets/img/transfer.png') }}" alt="Transfer" style="width: 18px;">
                     <span style=" font-size:18px; margin-top:3px; margin-left:6px;">Transfer</span></a>
             </li>
-            <li class="nav-item  py-2">
+            <li class="nav-item py-2 {{ Request::is('transaction') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ url('transaction') }}">
                     <img src="{{ asset('assets/img/transaction.png') }}" alt="Transaction" style="width: 18px;">
                     <span style=" font-size:18px; margin-top:3px; margin-left:6px;">Transaction</span></a>
             </li>
             
-
+{{-- 
             @if (session()->get('role') == 'parent')
                 <li class="nav-item  py-2">
                     <a class="nav-link" href="{{ url('transfer') }}">
@@ -100,7 +100,7 @@
                         <span style=" font-size:18px; margin-top:3px; margin-left:6px;">Parental
                             Control</span></a>
                 </li>
-            @endif
+            @endif --}}
 
             @if (session()->get('role') == 'admin')
                 <li class="nav-item  pb-4">
@@ -257,6 +257,7 @@
     <!-- Page level custom scripts -->
     <script src="{{ asset('sbadmin/js/demo/chart-area-demo.js') }}"></script>
     <script src="{{ asset('sbadmin/js/demo/chart-pie-demo.js') }}"></script>
+    @stack('scripts')
 
 </body>
 

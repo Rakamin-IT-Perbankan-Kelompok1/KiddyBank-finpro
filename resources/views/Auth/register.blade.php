@@ -47,7 +47,7 @@
             <p>{{ session('error') }}</p>
         @endif
         <div class="appName">   
-            <img src="{{ asset('assets/img/logo.png') }}" alt="KiddyBank">
+            <img src="{{ asset('assets/img/logo.jpg') }}" alt="KiddyBank" style="height:150px;width:250px" class="">
             KiddyBank
         </div>
         <div class="title">Registration</div>
