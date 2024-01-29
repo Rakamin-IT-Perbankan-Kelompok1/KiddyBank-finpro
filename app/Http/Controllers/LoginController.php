@@ -384,25 +384,25 @@ class LoginController extends Controller
             'email.max' =>  'karakter email terlalu panjang',
         ]);
 
-        try {
-            User::where('id', session()->get('id'))->update([
-                'username'  =>  $request->username,
-                'email' => $request->email
-            ]);
-            $id = session()->get('id');
+        // try {
+        //     User::where('id', session()->get('id'))->update([
+        //         'username'  =>  $request->username,
+        //         'email' => $request->email
+        //     ]);
+        //     $id = session()->get('id');
 
-            $result = User::where('id', session()->get('id'))->first();
-            session()->forget('username');
-            session()->forget('email');
-            session([
-                'username'  =>  $result->username,
-                'email' =>  $result->email
-            ]);
+        //     $result = User::where('id', session()->get('id'))->first();
+        //     session()->forget('username');
+        //     session()->forget('email');
+        //     session([
+        //         'username'  =>  $result->username,
+        //         'email' =>  $result->email
+        //     ]);
 
-            return redirect()->back()->with('success', 'data berhasil diupdate');
-        } catch (\Throwable $th) {
-            return redirect()->back()->with('error', 'data gagal diupdate');
-        }
+        //     return redirect()->back()->with('success', 'data berhasil diupdate');
+        // } catch (\Throwable $th) {
+        //     return redirect()->back()->with('error', 'data gagal diupdate');
+        // }
     }
 
     /**

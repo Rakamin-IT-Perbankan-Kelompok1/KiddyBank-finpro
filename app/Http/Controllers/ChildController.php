@@ -23,10 +23,6 @@ class ChildController extends Controller
     public function registerKids(Request $request)
     {
 
-        // $user = User::all();
-        // // dd($user);
-        // dd($user->fullname);
-        // $email = $user->email;
         
         session([
             'id' => session()->get('id'),
@@ -37,13 +33,11 @@ class ChildController extends Controller
         return view("pages.registerKids");
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    //function untuk membuat akun seorang anak
     public function registerChild(Request $request)
     {
         
-        // dd($request->all());
+        
         $request->validate([
             'child_username' => 'required|max:255|unique:child,child_username',
             'child_fullname' => 'required|max:255',
@@ -73,14 +67,16 @@ class ChildController extends Controller
         ]);
 
         try {
+        //membuat expired untuk otp
         $today = date("Y-m-d H:i:s"); // Mendapatkan tanggal hari ini dalam format YYYY-MM-DD
         $expired = date("Y-m-d H:i:s", strtotime($today . " +1 day"));
+
+        //melakukan hashing password
         $password = Hash::make($request->password);
 
         $user = new Child();
 
         $user->id_user = session('id');
-        // dd(session()->get('id_user'));
         $user->child_username = $request->child_username;
         $user->child_fullname = $request->child_fullname;
         $user->email = $request->email;
@@ -89,10 +85,13 @@ class ChildController extends Controller
         $user->password = $password;
         $user->expired_otp = $expired;
         $user->activated = '0';
-
+        
+        //membuat generate code otp
         $otp = mt_rand(100000, 999999); // Generate a 6-digit OTP
         $user->otp = $otp;
 
+
+        //mengirimkan otp ke email
         // $data = [
         //     'email' => $request->email,
         //     'otp' => $otp,
@@ -102,22 +101,20 @@ class ChildController extends Controller
 
         $user->save();
 
-        // Create an account entry in the accountbank table
+       
         $account = new AccountBank();
         $account->user_id = $user->id;
 
-        // Generate a unique account number
-        $bankCode = '0001'; // Replace with your actual bank code
+        //untuk menggenate unique account number pada bankaccount
+        $bankCode = '0001'; 
         $randomNumbers = str_pad(mt_rand(0, 99999), 5, '0', STR_PAD_LEFT);
-        $id = str_pad($user->id, 5, '0', STR_PAD_LEFT); // Assuming user ID is unique
+        $id = str_pad($user->id, 5, '0', STR_PAD_LEFT); 
         $accountNumber = $bankCode . $randomNumbers . $id;
 
         $account->account_type = "Child";
         $account->account_number = $accountNumber;
-        $account->balance = 500000; // You can initialize the balance as needed
+        $account->balance = 500000; 
         $account->save();
-
-
 
             return redirect()->to('/dashboard')->with('success', 'data berhasil ditambahkan');
         } catch (\Throwable $th) {
@@ -128,7 +125,7 @@ class ChildController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-
+    //function untuk menampilkan tampilan vcheck otp 
     public function showOTP(Request $request)
     {
 
@@ -142,6 +139,7 @@ class ChildController extends Controller
         return view('Auth.registerChildOTP');
     }
 
+    //function untuk mengecek apakah otp sudah sesuai apa belum
     public function verifyOTP(Request $request)
     {
         // dd('sasa');

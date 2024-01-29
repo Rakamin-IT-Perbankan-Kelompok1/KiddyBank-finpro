@@ -24,12 +24,14 @@ class AdminController extends Controller
         //dd(session('id_accountbank'));
         $data = Transaction::paginate(3);
 
+        //data untuk menampilkan transaksi oleh anak saja
         $data_child = DB::table('transactions')
             ->join('bankaccount', 'bankaccount.id', '=', 'transactions.id_bankaccount')
             ->where('id_bankaccount', '=', session('id_accountbank'))
             ->where('account_type', '=', session('account_type'))
             ->get('transactions.*');
 
+        //data untuk menampilkan transaksi yang dilakukan oleh anak dan orang tua
         $data_parent = DB::table('transactions')
             ->join('bankaccount', 'bankaccount.id', '=', 'transactions.id_bankaccount')
             ->join('child', 'child.id', '=', 'bankaccount.user_id')
@@ -41,10 +43,7 @@ class AdminController extends Controller
             })
             ->get(['transactions.*', 'bankaccount.account_number', 'bankaccount.balance']);
 
-        // dd($data_parent);
-
-        // $type = 'parent';
-
+        //untuk mengambil data bankaccount dan menampilkannya pada dashboard
         $data_account_child = DB::table('bankaccount')
             ->join('child', 'child.id', '=', 'bankaccount.user_id')
             ->join('users', 'users.id', '=', 'child.id_user')
@@ -52,8 +51,8 @@ class AdminController extends Controller
             ->where('bankaccount.account_type', '=', 'Child')
             ->get(['child.*', 'bankaccount.account_number', 'bankaccount.balance']);
 
-        // dd($data_account_child);
 
+        //untuk memberikan data pada chart.js
         $weeklyTransactions = DB::table('transactions')
             ->select(DB::raw('SUM(amount) as total_amount'), DB::raw('WEEK(created_at) as week_number'))
             ->where('id_bankaccount', '=', session('id_accountbank'))
@@ -68,6 +67,7 @@ class AdminController extends Controller
             $data_pengeluaran[] = $transaction->total_amount;
         }
 
+        //untuk mengembalikan tampilan dashboard dan 'data', 'data_parent', 'data_child', 'total', 'data_pengeluaran', 'data_account_child'
         return view('pages.index', compact('data', 'data_parent', 'data_child', 'total', 'data_pengeluaran', 'data_account_child'));
     }
 
